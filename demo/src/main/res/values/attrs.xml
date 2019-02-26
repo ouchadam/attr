@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoundedButton">
+        <attr name="radius" format="dimension"/>
+        <attr name="rippleColor" format="color|reference"/>
+        <attr name="backgroundColor" format="color|reference"/>
+    </declare-styleable>
+</resources>
