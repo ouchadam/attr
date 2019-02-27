@@ -2,6 +2,7 @@ package com.github.ouchadam.attr
 
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
+import android.support.annotation.IdRes
 import android.support.annotation.Px
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.*
@@ -138,6 +139,7 @@ private fun findType(parameter: VariableElement): AndroidType {
         parameter.getAnnotation(ColorInt::class.java) != null -> AndroidType.COLOR
         parameter.getAnnotation(Dimension::class.java) != null -> AndroidType.DIMEN
         parameter.getAnnotation(Px::class.java) != null -> AndroidType.PX
+        parameter.getAnnotation(IdRes::class.java) != null -> AndroidType.RESOURCE_ID
         else -> {
             when (parameter.asType().asTypeName()) {
                 ClassName("java.lang", "Integer"), INT -> AndroidType.INTEGER

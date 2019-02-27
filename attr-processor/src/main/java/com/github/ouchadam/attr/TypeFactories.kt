@@ -44,6 +44,10 @@ class TypeFactories {
         .addStatement("return p0.getFloat(p1, 0f)")
         .build()
 
+    private fun resourceIntFactory(isNullable: Boolean) = create(isNullable, Int::class, "resourceInt")
+        .addStatement("return p0.getResourceId(p1, 0)")
+        .build()
+
     private fun create(isNullable: Boolean, klass: KClass<*>, name: String = klass.simpleName!!.decapitalize()) =
         FunSpec.builder("${name}${if (isNullable) "Nullable" else ""}Factory")
             .addModifiers(KModifier.PUBLIC)
@@ -64,6 +68,7 @@ class TypeFactories {
         AndroidType.BOOLEAN to booleanFactory(false),
         AndroidType.INTEGER to intFactory(false),
         AndroidType.PX to pxIntFactory(false),
+        AndroidType.RESOURCE_ID to resourceIntFactory(false),
         AndroidType.FLOAT to floatFactory(false)
     )
 
@@ -73,6 +78,7 @@ class TypeFactories {
         AndroidType.BOOLEAN to booleanFactory(true),
         AndroidType.INTEGER to intFactory(true),
         AndroidType.PX to pxIntFactory(true),
+        AndroidType.RESOURCE_ID to resourceIntFactory(true),
         AndroidType.FLOAT to floatFactory(true)
     )
 
