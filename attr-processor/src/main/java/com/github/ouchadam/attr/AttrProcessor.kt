@@ -142,6 +142,7 @@ private fun findType(parameter: VariableElement): AndroidType {
             when (parameter.asType().asTypeName()) {
                 ClassName("java.lang", "Integer"), INT -> AndroidType.INTEGER
                 ClassName("java.lang", "Boolean"), BOOLEAN -> AndroidType.BOOLEAN
+                ClassName("java.lang", "Float"), FLOAT -> AndroidType.FLOAT
                 else -> throw IllegalArgumentException(parameter.asType().toString())
             }
         }

@@ -5,5 +5,6 @@ enum class AndroidType {
     DIMEN,
     PX,
     BOOLEAN,
-    INTEGER
+    INTEGER,
+    FLOAT
 }

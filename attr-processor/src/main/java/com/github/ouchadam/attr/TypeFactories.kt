@@ -40,6 +40,10 @@ class TypeFactories {
         .addStatement("return p0.getDimensionPixelSize(p1, 0)")
         .build()
 
+    private fun floatFactory(isNullable: Boolean) = create(isNullable, Float::class)
+        .addStatement("return p0.getFloat(p1, 0f)")
+        .build()
+
     private fun create(isNullable: Boolean, klass: KClass<*>, name: String = klass.simpleName!!.decapitalize()) =
         FunSpec.builder("${name}${if (isNullable) "Nullable" else ""}Factory")
             .addModifiers(KModifier.PUBLIC)
@@ -59,7 +63,8 @@ class TypeFactories {
         AndroidType.DIMEN to dimenFloatFactory(false),
         AndroidType.BOOLEAN to booleanFactory(false),
         AndroidType.INTEGER to intFactory(false),
-        AndroidType.PX to pxIntFactory(false)
+        AndroidType.PX to pxIntFactory(false),
+        AndroidType.FLOAT to floatFactory(false)
     )
 
     private val nullableFunctionsMap: Map<AndroidType, FunSpec> = mapOf(
@@ -67,7 +72,8 @@ class TypeFactories {
         AndroidType.DIMEN to dimenFloatFactory(true),
         AndroidType.BOOLEAN to booleanFactory(true),
         AndroidType.INTEGER to intFactory(true),
-        AndroidType.PX to pxIntFactory(true)
+        AndroidType.PX to pxIntFactory(true),
+        AndroidType.FLOAT to floatFactory(true)
     )
 
     fun forType(isNullable: Boolean, type: AndroidType): FunSpec {
