@@ -4,5 +4,6 @@
         <attr name="radius" format="dimension"/>
         <attr name="rippleColor" format="color|reference"/>
         <attr name="backgroundColor" format="color|reference"/>
+        <attr name="layoutRef" format="reference"/>
     </declare-styleable>
 </resources>

@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
+import androidx.annotation.IdRes
 import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
@@ -58,6 +59,7 @@ class CustomView @JvmOverloads constructor(
     data class CustomAttributes(
         @Attr.Id(R.attr.radius) @Dimension val radius: Float,
         @Attr.Id(R.attr.rippleColor) @ColorInt val rippleColor: Int,
-        @Attr.Id(R.attr.backgroundColor) @ColorInt val backgroundColor: Int
+        @Attr.Id(R.attr.backgroundColor) @ColorInt val backgroundColor: Int,
+        @Attr.Id(R.attr.layoutRef) @IdRes val layoutRef: Int
     )
 }
