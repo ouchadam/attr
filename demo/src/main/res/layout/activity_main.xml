@@ -7,15 +7,15 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <com.github.ouchadam.attr.RoundedButton
-            android:id="@+id/button"
+    <com.github.ouchadam.attr.CustomView
+            android:id="@+id/customView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hello World!"
             android:textSize="30sp"
             android:padding="12dp"
             app:radius="20dp"
-            app:rippleColor="@color/colorAccent"
+            app:rippleColor="@color/colorPrimaryDark"
             app:backgroundColor="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
