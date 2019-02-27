@@ -13,6 +13,7 @@ import androidx.annotation.Dimension
 import androidx.annotation.Px
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.res.getBooleanOrThrow
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -27,13 +28,17 @@ class MainActivity : AppCompatActivity() {
         customView.setOnClickListener {
             Toast.makeText(this, "is light theme: ${themeAttributes.isLightTheme}", Toast.LENGTH_SHORT).show()
         }
+
+        // TODO throw if ids are missing (or null if params are nullable
+        // infer id name from parameter name if no annotation is present
     }
 }
 
 @Attr
 data class ThemeAttributes(
     @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
-    @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean
+    @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
+    @Attr.Id(-1) val nonExistentAttribute: Boolean?
 )
 
 class CustomView @JvmOverloads constructor(

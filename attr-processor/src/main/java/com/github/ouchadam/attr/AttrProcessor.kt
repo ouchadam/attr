@@ -85,7 +85,7 @@ class AttrProcessor : AbstractProcessor() {
             .indent()
             .apply {
                 params.sortedBy { it.attrId }.forEachIndexed { index, param ->
-                    val factory = factories.forType(param.type)
+                    val factory = factories.forType(param.isNullable, param.type)
                     addStatement("val %L = %N(bar, %L)", param.variableName, factory, index)
                 }
             }
@@ -113,7 +113,7 @@ class AttrProcessor : AbstractProcessor() {
         return ctor.parameters.mapIndexed { index, parameter ->
             val attrId = parameter.getAnnotation(Attr.Id::class.java).value
             val type = findType(parameter)
-            Param(type, "v_$index", attrId, index)
+            Param(type, "v_$index", attrId, index, parameter.inferNullability())
         }
     }
 }
@@ -127,7 +127,8 @@ private data class Param(
     val type: AndroidType,
     val variableName: String,
     val attrId: Int,
-    val parameterPosition: Int
+    val parameterPosition: Int,
+    val isNullable: Boolean
 )
 
 private data class ClassType(val type: TypeMirror, val func: FunSpec)
@@ -137,10 +138,16 @@ private fun findType(parameter: VariableElement): AndroidType {
         parameter.getAnnotation(ColorInt::class.java) != null -> AndroidType.COLOR
         parameter.getAnnotation(Dimension::class.java) != null -> AndroidType.DIMEN
         parameter.getAnnotation(Px::class.java) != null -> AndroidType.PX
-        else -> when (parameter.asType().kind) {
-            TypeKind.INT -> AndroidType.INTEGER
-            TypeKind.BOOLEAN -> AndroidType.BOOLEAN
-            else -> throw IllegalArgumentException(parameter.asType().toString())
+        else -> {
+            when (parameter.asType().asTypeName()) {
+                ClassName("java.lang", "Integer"), INT -> AndroidType.INTEGER
+                ClassName("java.lang", "Boolean"), BOOLEAN -> AndroidType.BOOLEAN
+                else -> throw IllegalArgumentException(parameter.asType().toString())
+            }
         }
     }
+}
+
+private fun Element.inferNullability(): Boolean {
+    return this.asType().kind == TypeKind.DECLARED
 }
