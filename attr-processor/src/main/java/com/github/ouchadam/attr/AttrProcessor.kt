@@ -78,13 +78,13 @@ class AttrProcessor : AbstractProcessor() {
 
     private fun classType(klass: TypeElement, factories: TypeFactories): ClassType {
         val params = readConstructorParameters(klass)
-        val listOfAttrIds = params.map { it.attrId }.sorted().joinToString(",", "intArrayOf(", ")")
+        val listOfAttrIds = params.map { it.attrIdLiteral }.sorted().joinToString(",", "intArrayOf(", ")")
         val body = CodeBlock.builder()
             .addStatement("val bar = p0(%L)", listOfAttrIds)
             .addStatement("try {")
             .indent()
             .apply {
-                params.sortedBy { it.attrId }.forEachIndexed { index, param ->
+                params.sortedBy { it.attrIdLiteral }.forEachIndexed { index, param ->
                     val factory = factories.forType(param.isNullable, param.type)
                     addStatement("val %L = %N(bar, %L)", param.variableName, factory, index)
                 }
@@ -111,7 +111,7 @@ class AttrProcessor : AbstractProcessor() {
     private fun readConstructorParameters(element: TypeElement): List<Param> {
         val ctor = element.enclosedElements.find { it.kind == ElementKind.CONSTRUCTOR } as ExecutableElement
         return ctor.parameters.mapIndexed { index, parameter ->
-            val attrId = parameter.getAnnotation(Attr.Id::class.java).value
+            val attrId = parameter.getAnnotation(Attr.Id::class.java)?.value?.toString() ?: "R.attr.${parameter.simpleName}"
             val type = findType(parameter)
             Param(type, "v_$index", attrId, index, parameter.inferNullability())
         }
@@ -126,7 +126,7 @@ private fun FileSpec.Builder.addFunctions(functions: List<FunSpec>): FileSpec.Bu
 private data class Param(
     val type: AndroidType,
     val variableName: String,
-    val attrId: Int,
+    val attrIdLiteral: String,
     val parameterPosition: Int,
     val isNullable: Boolean
 )

@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         customView.setOnClickListener {
             Toast.makeText(this, "is light theme: ${themeAttributes.isLightTheme}", Toast.LENGTH_SHORT).show()
         }
-
-        // TODO throw if ids are missing (or null if params are nullable
-        // infer id name from parameter name if no annotation is present
     }
 }
 
@@ -38,7 +35,8 @@ class MainActivity : AppCompatActivity() {
 data class ThemeAttributes(
     @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
     @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
-    @Attr.Id(-1) val nonExistentAttribute: Boolean?
+    @Attr.Id(-1) val nonExistentAttribute: Boolean?,
+    @ColorInt val colorPrimaryDark: Int
 )
 
 class CustomView @JvmOverloads constructor(
