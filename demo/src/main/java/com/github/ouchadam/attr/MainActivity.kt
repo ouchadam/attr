@@ -31,16 +31,15 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "is light theme: ${themeAttributes.isLightTheme}", Toast.LENGTH_SHORT).show()
         }
     }
-}
 
-@Attr
-data class ThemeAttributes(
-    @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
-    @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
-    @Attr.Id(-1) val nonExistentAttribute: Boolean?,
-    @Attr.Id(-1) val foobar: Drawable?,
-    @ColorInt val colorPrimaryDark: Int
-)
+    @Attr
+    data class ThemeAttributes(
+        @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
+        @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
+        @ColorInt val colorPrimaryDark: Int,
+        val nonExistentAttribute: Drawable?
+    )
+}
 
 class CustomView @JvmOverloads constructor(
     context: Context,
@@ -61,7 +60,6 @@ class CustomView @JvmOverloads constructor(
     data class CustomAttributes(
         @Attr.Id(R.attr.radius) @Dimension val radius: Float,
         @Attr.Id(R.attr.rippleColor) @ColorInt val rippleColor: Int,
-        @Attr.Id(R.attr.backgroundColor) @ColorInt val backgroundColor: Int,
-        @Attr.Id(R.attr.layoutRef) @IdRes val layoutRef: Int
+        @Attr.Id(R.attr.backgroundColor) @ColorInt val backgroundColor: Int
     )
 }
