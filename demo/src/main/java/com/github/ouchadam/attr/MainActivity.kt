@@ -36,8 +36,8 @@ class MainActivity : AppCompatActivity() {
     data class ThemeAttributes(
         @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
         @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
-        @ColorInt val colorPrimaryDark: Int,
-        val nonExistentAttribute: Drawable?
+        @Attr.Id(-1) val missingAttribute: Drawable?,
+        @ColorInt val colorPrimaryDark: Int
     )
 }
 

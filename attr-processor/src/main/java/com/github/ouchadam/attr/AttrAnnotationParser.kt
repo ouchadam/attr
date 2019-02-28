@@ -1,9 +1,9 @@
 package com.github.ouchadam.attr
 
-import android.support.annotation.ColorInt
-import android.support.annotation.Dimension
-import android.support.annotation.IdRes
-import android.support.annotation.Px
+import androidx.annotation.ColorInt
+import androidx.annotation.Dimension
+import androidx.annotation.IdRes
+import androidx.annotation.Px
 import com.github.ouchadam.attr.Classes.DRAWABLE
 import com.github.ouchadam.attr.Classes.JAVA_BOOLEAN
 import com.github.ouchadam.attr.Classes.JAVA_FLOAT

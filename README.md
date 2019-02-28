@@ -1,23 +1,37 @@
 # attr
 Attribute parsing using kapt
 
+### Supports
+
+- `@Dimension Float`
+- `@ColorInt Int`
+- `@Px Int`
+- `@IdRes Int`
+- `Float`
+- `Boolean`
+- `Int`
+- `Drawable`
 
 ### Usage
-
 
 Declare collections of attributes as data classes
 ```kotlin
 @Attr
-data class CustomAttributes(
-    @Attr.Id(R.attr.radius) @Dimension val radius: Float,
-    @Attr.Id(R.attr.rippleColor) @ColorInt val rippleColor: Int,
-    @Attr.Id(R.attr.backgroundColor) @ColorInt val backgroundColor: Int
+data class ThemeAttributes(
+    @Attr.Id(R.attr.radius) @Dimension val radius: Float, // explicitly specify the attribute id
+    @ColorInt val colorPrimary: Int, // infer attribute id from parameter name
+    val missingAttribute : Drawable? // allow attribute to be unavailable
 )
 ```
 
-
-and read them
+The library adds an extension function to [Resources.Theme](https://developer.android.com/reference/android/content/res/Resources.Theme)
 
 ```kotlin
-val customAttributes = context.theme.attr<CustomAttributes>(attributeSet)
+val themeAttributes = context.theme.attr<ThemeAttributes>()
 ```
+
+An [AttributeSet](https://developer.android.com/reference/android/util/AttributeSet) can be provide for usage with a custom view
+```kotlin
+val customViewAttributes = context.theme.attr<CustomViewAttributes>(attributeSet)
+```
+
