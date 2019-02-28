@@ -10,5 +10,6 @@ internal object Classes {
     val JAVA_INT = ClassName("java.lang", "Integer")
     val JAVA_BOOLEAN = ClassName("java.lang", "Boolean")
     val JAVA_FLOAT = ClassName("java.lang", "Float")
+    val DRAWABLE = ClassName("android.graphics.drawable", "Drawable")
 
 }

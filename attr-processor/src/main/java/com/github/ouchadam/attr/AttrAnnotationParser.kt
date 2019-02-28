@@ -4,18 +4,20 @@ import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
 import android.support.annotation.IdRes
 import android.support.annotation.Px
+import com.github.ouchadam.attr.Classes.DRAWABLE
 import com.github.ouchadam.attr.Classes.JAVA_BOOLEAN
 import com.github.ouchadam.attr.Classes.JAVA_FLOAT
 import com.github.ouchadam.attr.Classes.JAVA_INT
 import com.squareup.kotlinpoet.*
-import java.lang.IllegalArgumentException
+import me.eugeniomarletti.kotlin.metadata.*
+import me.eugeniomarletti.kotlin.metadata.shadow.metadata.ProtoBuf
 import javax.lang.model.element.*
-import javax.lang.model.type.TypeKind
+import javax.lang.model.type.TypeMirror
 
 internal class AttrAnnotationParser(private val factories: TypeFactories) {
 
-    fun parse(klass: TypeElement): AttrAnnotation {
-        val params = readConstructorParameters(klass)
+    fun parse(klass: AttrClass): AttrAnnotation {
+        val params = klass.params
         val listOfAttrIds = params.map { it.attrIdLiteral }.sorted().joinToString(",", "intArrayOf(", ")")
         val body = CodeBlock.builder()
             .addStatement("val bar = p0(%L)", listOfAttrIds)
@@ -27,7 +29,7 @@ internal class AttrAnnotationParser(private val factories: TypeFactories) {
                     addStatement("val %L = %N(bar, %L)", param.variableName, factory, index)
                 }
             }
-            .addStatement("return %T(${params.map { it.variableName }.joinToString(",")})", klass.asType())
+            .addStatement("return %T(${params.map { it.variableName }.joinToString(",")})", klass.type)
             .unindent()
             .addStatement("} finally { bar.recycle() }")
             .build()
@@ -40,20 +42,57 @@ internal class AttrAnnotationParser(private val factories: TypeFactories) {
                     parameters = *arrayOf(IntArray::class.asTypeName())
                 )
             )
-            .returns(klass.asType().asTypeName())
+            .returns(klass.type.asTypeName())
             .addCode(body)
             .build()
-        return AttrAnnotation(klass.asType(), classFactory)
+        return AttrAnnotation(klass.type, classFactory)
     }
 
-    private fun readConstructorParameters(element: TypeElement): List<Param> {
-        val ctor = element.enclosedElements.find { it.kind == ElementKind.CONSTRUCTOR } as ExecutableElement
-        return ctor.parameters.mapIndexed { index, parameter ->
+}
+
+internal data class AttrClass(
+    val params: List<Param>,
+    val type: TypeMirror,
+    val simpleName: Name
+)
+
+internal data class Param(
+    val type: AndroidType,
+    val variableName: String,
+    val attrIdLiteral: String,
+    val parameterPosition: Int,
+    val isNullable: Boolean
+)
+
+internal class Create {
+
+    fun create(element: TypeElement): AttrClass {
+        val kotlinMetadata = element.kotlinMetadata as KotlinClassMetadata
+        val nameResolver = kotlinMetadata.data.nameResolver
+        fun ProtoBuf.Type.extractFullName() = extractFullName(kotlinMetadata.data)
+
+        val kotlinParams =
+            kotlinMetadata.data.classProto.constructorList.single { it.isPrimary }.valueParameterList.map {
+                val name = nameResolver.getString(it.name)
+                ConstructorParam(name, it.type.extractFullName().contains("?"))
+            }
+
+        val ctor = element.enclosedElements.first { it.kind == ElementKind.CONSTRUCTOR } as ExecutableElement
+
+        val attrParams = ctor.parameters.mapIndexed { index, parameter ->
+            val simpleName = parameter.simpleName
+
+            val kotlinParam = kotlinParams.first { it.name == simpleName.toString() }
+
             val attrId =
-                parameter.getAnnotation(Attr.Id::class.java)?.value?.toString() ?: "R.attr.${parameter.simpleName}"
+                parameter.getAnnotation(Attr.Id::class.java)?.value?.toString() ?: "R.attr.$simpleName"
             val type = findType(parameter)
-            Param(type, "v_$index", attrId, index, parameter.inferNullability())
+            Param(type, "v_$index", attrId, index, kotlinParam.isNullable)
+
+
         }
+        return AttrClass(attrParams, element.asType(), element.simpleName)
+
     }
 
     private fun findType(parameter: VariableElement): AndroidType {
@@ -67,21 +106,13 @@ internal class AttrAnnotationParser(private val factories: TypeFactories) {
                     JAVA_INT, INT -> AndroidType.INTEGER
                     JAVA_BOOLEAN, BOOLEAN -> AndroidType.BOOLEAN
                     JAVA_FLOAT, FLOAT -> AndroidType.FLOAT
-                    else -> throw IllegalArgumentException(parameter.asType().toString())
+                    DRAWABLE -> AndroidType.DRAWABLE
+                    else -> throw IllegalArgumentException()
                 }
             }
         }
     }
-
-    private fun Element.inferNullability(): Boolean {
-        return this.asType().kind == TypeKind.DECLARED
-    }
-
-    private data class Param(
-        val type: AndroidType,
-        val variableName: String,
-        val attrIdLiteral: String,
-        val parameterPosition: Int,
-        val isNullable: Boolean
-    )
 }
+
+data class ConstructorParam(val name: String, val isNullable: Boolean)
+

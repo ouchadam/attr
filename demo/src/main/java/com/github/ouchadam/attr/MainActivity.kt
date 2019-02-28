@@ -3,6 +3,7 @@ package com.github.ouchadam.attr
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.PaintDrawable
 import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
@@ -37,6 +38,7 @@ data class ThemeAttributes(
     @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
     @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
     @Attr.Id(-1) val nonExistentAttribute: Boolean?,
+    @Attr.Id(-1) val foobar: Drawable?,
     @ColorInt val colorPrimaryDark: Int
 )
 
