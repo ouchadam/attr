@@ -1,6 +1,6 @@
 package com.github.ouchadam.attr
 
-import android.support.annotation.AttrRes
+import androidx.annotation.AttrRes
 
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
