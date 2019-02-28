@@ -1,6 +1,6 @@
 package com.github.ouchadam.attr
 
-import com.squareup.kotlinpoet.ClassName
+import com.github.ouchadam.attr.Classes.TYPED_ARRAY
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.asTypeName
@@ -8,10 +8,8 @@ import kotlin.reflect.KClass
 
 class TypeFactories {
 
-    private val typedArray = ClassName("android.content.res", "TypedArray")
-
     private val valueOrThrow = FunSpec.builder("assertValue")
-        .addParameter("p0", typedArray)
+        .addParameter("p0", TYPED_ARRAY)
         .addParameter("p1", Int::class)
         .addStatement(
             "if (!p0.hasValue(p1)) throw %T(%S)",
@@ -52,7 +50,7 @@ class TypeFactories {
         FunSpec.builder("${name}${if (isNullable) "Nullable" else ""}Factory")
             .addModifiers(KModifier.PUBLIC)
             .returns(klass.asTypeName().copy(nullable = isNullable))
-            .addParameter("p0", ClassName("android.content.res", "TypedArray"))
+            .addParameter("p0", TYPED_ARRAY)
             .addParameter("p1", Int::class)
             .apply {
                 if (isNullable) {
@@ -62,7 +60,7 @@ class TypeFactories {
                 }
             }
 
-    private val functionsMap: Map<AndroidType, FunSpec> = mapOf(
+    private val functionsMap: Map<AndroidType, Factory> = mapOf(
         AndroidType.COLOR to colorIntFactory(false),
         AndroidType.DIMEN to dimenFloatFactory(false),
         AndroidType.BOOLEAN to booleanFactory(false),
@@ -72,7 +70,7 @@ class TypeFactories {
         AndroidType.FLOAT to floatFactory(false)
     )
 
-    private val nullableFunctionsMap: Map<AndroidType, FunSpec> = mapOf(
+    private val nullableFunctionsMap: Map<AndroidType, Factory> = mapOf(
         AndroidType.COLOR to colorIntFactory(true),
         AndroidType.DIMEN to dimenFloatFactory(true),
         AndroidType.BOOLEAN to booleanFactory(true),
@@ -82,7 +80,7 @@ class TypeFactories {
         AndroidType.FLOAT to floatFactory(true)
     )
 
-    fun forType(isNullable: Boolean, type: AndroidType): FunSpec {
+    fun forType(isNullable: Boolean, type: AndroidType): Factory {
         return when (isNullable) {
             true -> nullableFunctionsMap.getValue(type)
             false -> functionsMap.getValue(type)
@@ -93,3 +91,5 @@ class TypeFactories {
         return functionsMap.values + nullableFunctionsMap.values + valueOrThrow
     }
 }
+
+typealias Factory = FunSpec
