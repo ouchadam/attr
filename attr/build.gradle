@@ -1,4 +1,5 @@
 apply plugin: 'kotlin'
+apply plugin: 'com.novoda.bintray-release'
 
 dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -6,4 +7,13 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+publish {
+    userOrg = 'ouchadam'
+    groupId = 'com.github.ouchadam'
+    artifactId = 'attr'
+    publishVersion = "$System.env.CIRCLE_BUILD_NUM"
+    desc = 'Attribute parsing using kapt'
+    website = 'https://github.com/ouchadam/attr'
 }

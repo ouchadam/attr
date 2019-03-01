@@ -1,6 +1,7 @@
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'java-library'
+apply plugin: 'com.novoda.bintray-release'
 
 dependencies {
     implementation project(":attr")
@@ -14,4 +15,13 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+publish {
+    userOrg = 'ouchadam'
+    groupId = 'com.github.ouchadam'
+    artifactId = 'attr-processor'
+    publishVersion = "$System.env.CIRCLE_BUILD_NUM"
+    desc = 'Attribute parsing using kapt'
+    website = 'https://github.com/ouchadam/attr'
 }
