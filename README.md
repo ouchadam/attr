@@ -1,4 +1,4 @@
-# attr
+# attr [![CircleCI](https://circleci.com/gh/ouchadam/attr.svg?style=shield)](https://circleci.com/gh/ouchadam/attr) ![](https://img.shields.io/github/license/ouchadam/attr.svg)
 Attribute parsing using kapt
 
 ### Supports
