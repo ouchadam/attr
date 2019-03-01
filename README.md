@@ -1,4 +1,4 @@
-# attr [![CircleCI](https://circleci.com/gh/ouchadam/attr.svg?style=shield)](https://circleci.com/gh/ouchadam/attr) ![](https://img.shields.io/github/license/ouchadam/attr.svg)
+# attr [![CircleCI](https://circleci.com/gh/ouchadam/attr.svg?style=shield)](https://circleci.com/gh/ouchadam/attr) ![](https://img.shields.io/github/license/ouchadam/attr.svg) [ ![Download](https://api.bintray.com/packages/ouchadam/maven/attr/images/download.svg) ](https://bintray.com/ouchadam/maven/attr/_latestVersion)
 Attribute parsing using kapt
 
 ### Supports
