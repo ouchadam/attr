@@ -1,6 +1,12 @@
 # attr [![CircleCI](https://circleci.com/gh/ouchadam/attr.svg?style=shield)](https://circleci.com/gh/ouchadam/attr) ![](https://img.shields.io/github/license/ouchadam/attr.svg) [ ![Download](https://api.bintray.com/packages/ouchadam/maven/attr/images/download.svg) ](https://bintray.com/ouchadam/maven/attr/_latestVersion)
 Attribute parsing using kapt
 
+
+```
+compileOnly 'com.github.ouchadam:attr-processor:<latest-version>'
+implementation 'com.github.ouchadam:attr:<latest-version'
+```
+
 ### Supports
 
 - `@Dimension Float`
@@ -18,9 +24,10 @@ Declare collections of attributes as data classes
 ```kotlin
 @Attr
 data class ThemeAttributes(
-    @Attr.Id(R.attr.radius) @Dimension val radius: Float, // explicitly specify the attribute id
-    @ColorInt val colorPrimary: Int, // infer attribute id from parameter name
-    val missingAttribute : Drawable? // allow attribute to be unavailable
+    @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
+    @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
+    @Attr.Id(-1) val missingAttribute: Drawable?,
+    @ColorInt val colorPrimaryDark: Int
 )
 ```
 
