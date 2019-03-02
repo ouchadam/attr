@@ -22,12 +22,11 @@ implementation 'com.github.ouchadam:attr:<latest-version'
 
 Declare collections of attributes as data classes
 ```kotlin
-@Attr
+@Attr // mark data class for processing
 data class ThemeAttributes(
-    @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int,
-    @Attr.Id(R.attr.isLightTheme) val isLightTheme: Boolean,
-    @Attr.Id(-1) val missingAttribute: Drawable?,
-    @ColorInt val colorPrimaryDark: Int
+    @Attr.Id(R.attr.colorPrimary) @ColorInt val colorPrimary: Int, // explicitly specify the attribute id
+    @Attr.Id(-1) val missingAttribute: Drawable?, // allow attribute to be unavailable
+    @ColorInt val colorPrimaryDark: Int // infer attribute id from parameter name
 )
 ```
 
