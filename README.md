@@ -4,7 +4,7 @@ Attribute parsing using kapt
 
 ```
 compileOnly 'com.github.ouchadam:attr-processor:<latest-version>'
-implementation 'com.github.ouchadam:attr:<latest-version'
+implementation 'com.github.ouchadam:attr:<latest-version>'
 ```
 
 ### Supports
