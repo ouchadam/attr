@@ -3,8 +3,8 @@ Attribute parsing using kapt
 
 
 ```gradle
-compileOnly 'com.github.ouchadam:attr-processor:<latest-version>'
-implementation 'com.github.ouchadam:attr:<latest-version>'
+compileOnly 'com.github.ouchadam:attr:<latest-version>'
+kapt 'com.github.ouchadam:attr-processor:<latest-version>'
 ```
 
 ### Supports
